@@ -1,18 +1,17 @@
+const express = require('express');
 const app = require('./src/server');
 
-// Health check route as requested by the user
-app.get("/backend/api", (req, res) => {
+// Create a wrapper app to handle the /backend prefix correctly
+const wrapper = express();
+
+// Mount the main app logic under /backend
+wrapper.use('/backend', app);
+
+// Specific health check as requested
+wrapper.get("/backend/api", (req, res) => {
   res.json({ message: "Backend working!" });
 });
 
-// Middleware to strip /backend prefix for Vercel routing
-// This ensures that requests to /backend/api/auth/... are correctly routed to /api/auth/...
-app.use((req, res, next) => {
-  if (req.url.startsWith('/backend')) {
-    req.url = req.url.replace('/backend', '');
-  }
-  next();
-});
+module.exports = wrapper;
 
-module.exports = app;
 
