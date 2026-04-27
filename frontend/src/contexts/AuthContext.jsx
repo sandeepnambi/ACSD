@@ -121,9 +121,10 @@ export const AuthProvider = ({ children }) => {
     updateProfile,
     changePassword,
     isAuthenticated: !!user,
-    isAdmin: !!user,
-    isSenior: !!user,
+    isAdmin: false,
+    isSenior: false,
   }
+
 
   return (
     <AuthContext.Provider value={value}>

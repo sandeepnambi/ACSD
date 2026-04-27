@@ -7,7 +7,6 @@ import Dashboard from './pages/Dashboard'
 import Upload from './pages/Upload'
 import Reports from './pages/Reports'
 import ReportDetail from './pages/ReportDetail'
-import AdminPanel from './pages/AdminPanel'
 import Profile from './pages/Profile'
 import LoadingSpinner from './components/LoadingSpinner'
 
@@ -45,12 +44,6 @@ function App() {
         <Route path="reports" element={<Reports />} />
         <Route path="reports/:reportId" element={<ReportDetail />} />
         <Route path="profile" element={<Profile />} />
-        
-        {/* Admin only routes */}
-        <Route 
-          path="admin/*" 
-          element={user ? <AdminPanel /> : <Navigate to="/dashboard" />} 
-        />
       </Route>
       
       {/* Catch all route */}

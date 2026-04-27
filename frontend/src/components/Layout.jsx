@@ -13,7 +13,7 @@ import {
 } from '@heroicons/react/24/outline'
 
 const Layout = () => {
-  const { user, logout, isAdmin } = useAuth()
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
@@ -24,15 +24,13 @@ const Layout = () => {
   }
 
   const navigation = [
+
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'Upload Code', href: '/upload', icon: DocumentArrowUpIcon },
     { name: 'Reports', href: '/reports', icon: DocumentTextIcon },
     { name: 'Profile', href: '/profile', icon: UserIcon },
   ]
 
-  if (isAdmin) {
-    navigation.push({ name: 'Admin', href: '/admin', icon: CogIcon })
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
