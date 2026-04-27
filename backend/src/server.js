@@ -69,9 +69,13 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-const PORT = process.env.PORT || 5000;
+module.exports = app;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV}`);
-});
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV}`);
+  });
+}
+
