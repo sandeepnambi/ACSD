@@ -13,6 +13,10 @@ const adminRoutes = require('./routes/admin');
 
 const app = express();
 
+// Trust proxy for Vercel/Rate limiting
+app.set('trust proxy', 1);
+
+
 // Security middleware
 app.use(helmet());
 app.use(cors({
