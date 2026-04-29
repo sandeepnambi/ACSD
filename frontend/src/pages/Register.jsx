@@ -13,14 +13,45 @@ const Register = () => {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
   const [generalError, setGeneralError] = useState('')
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    specialChar: false,
+    number: false
+  })
+  const [emailCriteria, setEmailCriteria] = useState({
+    domain: false
+  })
   const { register } = useAuth()
   const navigate = useNavigate()
 
   const handleChange = (e) => {
+    const { name, value } = e.target
     setGeneralError('')
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
+    })
+
+    if (name === 'password') {
+      validatePassword(value)
+    }
+
+    if (name === 'email') {
+      setEmailCriteria({
+        domain: value.endsWith('@gmail.com')
+      })
+    }
+  }
+
+  const validatePassword = (password) => {
+    setPasswordCriteria({
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      specialChar: /[!@#$%^&*]/.test(password),
+      number: /[0-9]/.test(password)
     })
   }
 
@@ -35,14 +66,23 @@ const Register = () => {
     
     if (!formData.email) {
       newErrors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid'
+    } else if (!/\S+@gmail\.com$/.test(formData.email)) {
+      newErrors.email = 'Only @gmail.com email addresses are allowed'
     }
     
     if (!formData.password) {
       newErrors.password = 'Password is required'
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters'
+    } else {
+      const isPasswordValid = 
+        passwordCriteria.length && 
+        passwordCriteria.uppercase && 
+        passwordCriteria.lowercase && 
+        passwordCriteria.specialChar && 
+        passwordCriteria.number
+
+      if (!isPasswordValid) {
+        newErrors.password = 'Password does not meet all requirements'
+      }
     }
     
     if (formData.password !== formData.confirmPassword) {
@@ -78,122 +118,137 @@ const Register = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 relative overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
+      {/* Background Image with Overlay */}
+      <div 
+        className="absolute inset-0 z-0 opacity-40 bg-cover bg-center"
+        style={{ backgroundImage: 'url("/auth-bg.png")' }}
+      ></div>
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-blue-900/20 to-black/60"></div>
+
+      <div className="max-w-2xl w-full space-y-8 p-8 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl z-10 relative border border-white/20">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
+          <div className="flex justify-center">
+             <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-500/30 mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+             </div>
+          </div>
+          <h2 className="text-center text-3xl font-extrabold text-gray-900 tracking-tight">
+            Create Account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link
-              to="/login"
-              className="font-medium text-blue-600 hover:text-blue-500"
-            >
-              sign in to your existing account
-            </Link>
+            Join the Advanced Code Smell Detection community
           </p>
         </div>
         
         {generalError && (
-          <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded shadow-sm">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm text-red-700">{generalError}</p>
-              </div>
-            </div>
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-md animate-shake">
+            <p className="text-sm font-medium text-red-800">{generalError}</p>
           </div>
         )}
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                Username
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${errors.username ? 'border-red-300' : 'border-gray-300'} placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                placeholder="Enter your username"
-                value={formData.username}
-                onChange={handleChange}
-              />
-              {errors.username && (
-                <p className="mt-1 text-sm text-red-600">{errors.username}</p>
-              )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Username</label>
+                <input
+                  name="username"
+                  type="text"
+                  required
+                  className={`appearance-none block w-full px-4 py-3 border ${errors.username ? 'border-red-300' : 'border-gray-300'} rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm`}
+                  placeholder="johndoe"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
+                {errors.username && <p className="mt-1 text-xs text-red-600">{errors.username}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  className={`appearance-none block w-full px-4 py-3 border ${errors.email || !emailCriteria.domain ? 'border-red-300' : 'border-gray-300'} rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm`}
+                  placeholder="name@gmail.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+                <div className="mt-2 text-xs flex items-center space-x-2">
+                  <RequirementItem 
+                    met={emailCriteria.domain} 
+                    text="Must be a @gmail.com address" 
+                  />
+                </div>
+                {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${errors.email ? 'border-red-300' : 'border-gray-300'} placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-              )}
-            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+                <input
+                  name="password"
+                  type="password"
+                  required
+                  className={`appearance-none block w-full px-4 py-3 border ${errors.password ? 'border-red-300' : 'border-gray-300'} rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm`}
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${errors.password ? 'border-red-300' : 'border-gray-300'} placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-              )}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Confirm Password</label>
+                <input
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  className={`appearance-none block w-full px-4 py-3 border ${errors.confirmPassword ? 'border-red-300' : 'border-gray-300'} rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm`}
+                  placeholder="••••••••"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                />
+                {errors.confirmPassword && <p className="mt-1 text-xs text-red-600">{errors.confirmPassword}</p>}
+              </div>
             </div>
+          </div>
 
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${errors.confirmPassword ? 'border-red-300' : 'border-gray-300'} placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                placeholder="Confirm your password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
-              {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
-              )}
+          <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-3">
+             <div className="sm:col-span-2">
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Security Requirements</p>
+             </div>
+             <RequirementItem met={passwordCriteria.length} text="Min. 8 characters" />
+             <RequirementItem met={passwordCriteria.uppercase} text="Uppercase letter" />
+             <RequirementItem met={passwordCriteria.lowercase} text="Lowercase letter" />
+             <RequirementItem met={passwordCriteria.number} text="Number" />
+             <RequirementItem met={passwordCriteria.specialChar} text="Special char (!@#$)" />
+          </div>
+
+          <div className="flex items-center justify-center">
+            <div className="text-sm">
+              <Link to="/login" className="font-semibold text-blue-600 hover:text-blue-500 transition-colors">
+                Already have an account? Sign in
+              </Link>
             </div>
           </div>
 
           <div>
             <button
               type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={
+                loading || 
+                !passwordCriteria.length || 
+                !passwordCriteria.uppercase || 
+                !passwordCriteria.lowercase || 
+                !passwordCriteria.number || 
+                !passwordCriteria.specialChar ||
+                !emailCriteria.domain
+              }
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-all shadow-lg shadow-blue-600/20 active:scale-[0.98]"
             >
               {loading ? (
                 <LoadingSpinner size="small" />
@@ -207,5 +262,20 @@ const Register = () => {
     </div>
   )
 }
+
+const RequirementItem = ({ met, text }) => (
+  <div className={`flex items-center space-x-2 transition-colors duration-200 ${met ? 'text-green-600' : 'text-gray-400'}`}>
+    {met ? (
+      <svg className="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+      </svg>
+    ) : (
+      <div className="h-4 w-4 flex items-center justify-center">
+        <div className="h-1.5 w-1.5 rounded-full bg-current" />
+      </div>
+    )}
+    <span className={met ? 'font-medium' : ''}>{text}</span>
+  </div>
+)
 
 export default Register

@@ -59,7 +59,7 @@ const Dashboard = () => {
     },
     {
       name: 'Quality Score',
-      value: `${Math.round(stats?.averageQualityScore || 100)}%`,
+      value: `${Math.round(stats?.averageQualityScore ?? 100)}%`,
       icon: ChartBarIcon,
       color: 'bg-purple-500'
     }

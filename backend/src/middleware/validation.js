@@ -8,14 +8,24 @@ const validateRegistration = (req, res, next) => {
       'string.max': 'Username cannot exceed 30 characters',
       'any.required': 'Username is required'
     }),
-    email: Joi.string().email().required().messages({
-      'string.email': 'Please provide a valid email address',
-      'any.required': 'Email is required'
-    }),
-    password: Joi.string().min(6).required().messages({
-      'string.min': 'Password must be at least 6 characters long',
-      'any.required': 'Password is required'
-    })
+    email: Joi.string()
+      .email()
+      .pattern(new RegExp('@gmail\\.com$'))
+      .required()
+      .messages({
+        'string.email': 'Please provide a valid email address',
+        'string.pattern.base': 'Registration is only allowed with a @gmail.com email address',
+        'any.required': 'Email is required'
+      }),
+    password: Joi.string()
+      .min(8)
+      .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])'))
+      .required()
+      .messages({
+        'string.min': 'Password must be at least 8 characters long',
+        'string.pattern.base': 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*)',
+        'any.required': 'Password is required'
+      })
   });
 
   const { error } = schema.validate(req.body);

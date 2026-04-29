@@ -204,7 +204,7 @@ const Reports = () => {
                             {report.summary.totalSmells || 0} smells found
                           </p>
                           <p className="text-sm font-medium text-gray-900">
-                            Quality Score: {report.summary.qualityScore || 100}%
+                            Quality Score: {report.summary.qualityScore ?? 100}%
                           </p>
                         </div>
                       )}

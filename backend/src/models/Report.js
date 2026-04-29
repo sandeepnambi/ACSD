@@ -140,13 +140,21 @@ reportSchema.pre('save', function(next) {
   this.summary.totalSmells = this.codeSmells.length;
   this.summary.criticalSmells = this.codeSmells.filter(smell => smell.severity === 'high').length;
   
-  // Calculate quality score (100 - (5 * total smells) - (10 * critical smells))
-  this.summary.qualityScore = Math.max(0, 100 - (5 * this.summary.totalSmells) - (10 * this.summary.criticalSmells));
+  // Calculate quality score with weighted penalties
+  // High: -7 points, Medium: -3 points, Low: -1 point
+  let penalty = 0;
+  this.codeSmells.forEach(smell => {
+    if (smell.severity === 'high') penalty += 7;
+    else if (smell.severity === 'medium') penalty += 3;
+    else penalty += 1;
+  });
+  
+  this.summary.qualityScore = Math.max(0, 100 - penalty);
   
   // Determine status
   if (this.summary.totalSmells === 0) {
     this.summary.status = 'clean';
-  } else if (this.summary.criticalSmells > 0 || this.summary.totalSmells > 5) {
+  } else if (this.summary.criticalSmells > 0 || this.summary.totalSmells > 5 || this.summary.qualityScore < 70) {
     this.summary.status = 'needs_refactoring';
   } else {
     this.summary.status = 'minor_issues';
