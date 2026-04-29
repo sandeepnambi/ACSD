@@ -29,7 +29,11 @@ const Login = () => {
     console.log('Login result:', result)
     
     if (result.success) {
-      navigate('/dashboard')
+      if (result.user.role === 'admin') {
+        navigate('/admin')
+      } else {
+        navigate('/dashboard')
+      }
     } else {
       setError(result.error || 'Invalid credentials. Please try again.')
     }

@@ -45,6 +45,7 @@ const register = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role,
         createdAt: user.createdAt
       }
     });
@@ -94,6 +95,7 @@ const login = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role,
         lastLogin: user.lastLogin
       }
     });
@@ -117,6 +119,7 @@ const getProfile = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role,
         isActive: user.isActive,
         lastLogin: user.lastLogin,
         createdAt: user.createdAt,

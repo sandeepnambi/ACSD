@@ -23,13 +23,21 @@ const Layout = () => {
     navigate('/login')
   }
 
-  const navigation = [
+  let navigation = []
 
-    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-    { name: 'Upload Code', href: '/upload', icon: DocumentArrowUpIcon },
-    { name: 'Reports', href: '/reports', icon: DocumentTextIcon },
-    { name: 'Profile', href: '/profile', icon: UserIcon },
-  ]
+  if (user?.role === 'admin') {
+    navigation = [
+      { name: 'Dashboard', href: '/admin', icon: HomeIcon },
+      { name: 'Profile', href: '/profile', icon: UserIcon },
+    ]
+  } else {
+    navigation = [
+      { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
+      { name: 'Upload Code', href: '/upload', icon: DocumentArrowUpIcon },
+      { name: 'Reports', href: '/reports', icon: DocumentTextIcon },
+      { name: 'Profile', href: '/profile', icon: UserIcon },
+    ]
+  }
 
 
   return (

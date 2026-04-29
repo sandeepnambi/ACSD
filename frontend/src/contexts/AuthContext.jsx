@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
       setUser(user)
       
       toast.success(`Welcome back, ${user.username}!`)
-      return { success: true }
+      return { success: true, user }
     } catch (error) {
       const message = error.response?.data?.details || error.response?.data?.message || 'Login failed'
       toast.error(message)
@@ -121,8 +121,8 @@ export const AuthProvider = ({ children }) => {
     updateProfile,
     changePassword,
     isAuthenticated: !!user,
-    isAdmin: false,
-    isSenior: false,
+    isAdmin: user?.role === 'admin',
+    isSenior: user?.experience >= 5, // Example logic for senior
   }
 
 

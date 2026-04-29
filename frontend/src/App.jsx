@@ -9,6 +9,7 @@ import Reports from './pages/Reports'
 import ReportDetail from './pages/ReportDetail'
 import Profile from './pages/Profile'
 import LoadingSpinner from './components/LoadingSpinner'
+import AdminPanel from './pages/AdminPanel'
 
 function App() {
   const { user, loading } = useAuth()
@@ -38,12 +39,24 @@ function App() {
         path="/" 
         element={user ? <Layout /> : <Navigate to="/login" />}
       >
-        <Route index element={<Navigate to="/dashboard" />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="upload" element={<Upload />} />
-        <Route path="reports" element={<Reports />} />
-        <Route path="reports/:reportId" element={<ReportDetail />} />
+        <Route index element={<Navigate to={user?.role === 'admin' ? "/admin" : "/dashboard"} />} />
+        
+        {/* Developer only routes */}
+        {user?.role !== 'admin' && (
+          <>
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="upload" element={<Upload />} />
+            <Route path="reports" element={<Reports />} />
+            <Route path="reports/:reportId" element={<ReportDetail />} />
+          </>
+        )}
+
         <Route path="profile" element={<Profile />} />
+        
+        {/* Admin only routes */}
+        {user?.role === 'admin' && (
+          <Route path="admin/*" element={<AdminPanel />} />
+        )}
       </Route>
       
       {/* Catch all route */}

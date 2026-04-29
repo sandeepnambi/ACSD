@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { reportsAPI } from '../services/api'
 import { 
@@ -15,14 +15,19 @@ import LoadingSpinner from '../components/LoadingSpinner'
 
 const Dashboard = () => {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [stats, setStats] = useState(null)
   const [recentActivity, setRecentActivity] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
+    if (user?.role === 'admin') {
+      navigate('/admin')
+      return
+    }
     fetchDashboardData()
-  }, [])
+  }, [user, navigate])
 
   const fetchDashboardData = async () => {
     try {

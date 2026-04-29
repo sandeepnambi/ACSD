@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Password is required'],
     minlength: [8, 'Password must be at least 8 characters long']
   },
+  role: {
+    type: String,
+    enum: ['developer', 'admin'],
+    default: 'developer'
+  },
   isActive: {
     type: Boolean,
     default: true

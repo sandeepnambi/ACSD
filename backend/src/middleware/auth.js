@@ -30,9 +30,19 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-// Authorize middleware (placeholder if needed, currently allowing all authenticated users)
+// Authorize middleware
 const authorize = (...roles) => {
   return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Authorization required' });
+    }
+
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ 
+        message: `Access denied. Role '${req.user.role}' is not authorized to access this resource.` 
+      });
+    }
+
     next();
   };
 };
@@ -64,13 +74,13 @@ const canAccessResource = (req, res, next) => {
   
   // Check if user is accessing their own resource
   
-  // Users can only access their own resources
-  if (req.user._id.toString() === resourceUserId) {
+  // Users can only access their own resources, admins can access everything
+  if (req.user.role === 'admin' || req.user._id.toString() === resourceUserId) {
     return next();
   }
   
   return res.status(403).json({ 
-    message: 'Access denied. You can only access your own resources.' 
+    message: 'Access denied. You do not have permission to access this resource.' 
   });
 };
 
