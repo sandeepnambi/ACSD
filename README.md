@@ -1,127 +1,72 @@
-# 🔍 Automated Code Smell Detection (ACSD)
+# 🔍 Advanced Code Smell Detection (ACSD)
 
-**ACSD** is a sophisticated full-stack static analysis tool designed to help developers identify and eliminate "code smells" in their software. By automating the detection of common design flaws, ACSD empowers teams to maintain high code quality, reduce technical debt, and streamline the code review process.
+**ACSD** is a premium full-stack static analysis platform designed to empower developers to write cleaner, more maintainable code. By leveraging advanced AST-based detection and a sophisticated weighted quality engine, ACSD identifies architectural flaws and "code smells" with high precision.
 
 ---
 
-## ✨ Key Features
+## ✨ Key Features & Recent Updates
 
-- **🚀 Multi-Language Support**: Analysis engine supports **Python** (via AST), **Java**, and generic analysis for **C++**, **JavaScript**, and more.
+- **🚀 Multi-Language Support**: Analysis engine for **Python**, **Java**, **C++**, **JavaScript**, and more.
+- **⚖️ Weighted Quality Scoring (New)**: A high-accuracy scoring system that penalizes issues based on severity:
+  - **Critical Smells (High)**: -7 pts
+  - **Structural Smells (Medium)**: -3 pts
+  - **Minor Issues (Low)**: -1 pt
+- **🛡️ Hardened Registration**: Secure onboarding restricted to verified **@gmail.com** domains.
+- **🎨 Premium UI/UX**: Completely overhauled interface featuring:
+  - **Glassmorphism** authentication cards.
+  - **Modern Dashboard** with real-time health metrics.
+  - **Enhanced Profile Management** for technical skill tracking and coding presence.
 - **🕵️ Precise Smell Detection**:
-  - **Long Method**: Identifies overly complex functions that should be refactored.
-  - **Large Class**: Detects "God Objects" that take on too many responsibilities.
-  - **Duplicate Code**: Locates redundant code blocks to encourage DRY principles.
-  - **Excessive Parameters**: Flags methods with too many arguments.
-- **📊 Interactive Dashboard**: Visualize code health metrics, smell distributions, and historical trends.
-- **📄 Detailed Reporting**: Generate comprehensive reports with specific file locations and refactoring suggestions.
-- **👤 User Management**: Secure authentication and profile management.
-- **📂 History Tracking**: Maintain a record of all analyzed files and their quality scores over time.
+  - **Long Method**: Overly complex functions.
+  - **Large Class**: "God Objects" with excessive responsibility.
+  - **Duplicate Code**: Locates redundant logic (DRY principle).
+  - **Excessive Parameters**: Methods with too many arguments.
 
 ---
 
 ## 🛠️ Technology Stack
 
 ### Frontend
-- **Framework**: React.js 18 (Vite-powered)
-- **Styling**: TailwindCSS for modern, responsive UI
-- **State Management**: React Query (TanStack Query)
-- **Icons**: Heroicons
-- **Notifications**: React Hot Toast
+- **React.js 18** (Vite-powered)
+- **TailwindCSS** with high-end abstract backgrounds
+- **Heroicons** for sleek iconography
+- **Framer Motion & Custom Transitions** for a premium feel
 
 ### Backend
-- **Runtime**: Node.js & Express.js
-- **Database**: MongoDB with Mongoose ODM
-- **Security**: JWT Authentication, Bcrypt encryption, Helmet, and Rate Limiting
-- **Analysis Engine**: Python AST (for deep Python analysis) and JavaParser
-
----
-
-## 🏗️ Project Structure
-
-```text
-ACSD/
-├── frontend/             # React application (Vite)
-│   ├── src/
-│   │   ├── components/   # Shared UI components
-│   │   ├── pages/        # View components
-│   │   └── services/     # API integration layer
-├── backend/              # Node.js API server
-│   ├── src/
-│   │   ├── controllers/  # Business logic
-│   │   ├── models/       # Data schemas
-│   │   └── services/     # Code analysis & smell detection
-├── Sample Codes/         # Example files for testing analysis
-└── Sample Reports/       # Example output reports
-```
+- **Node.js & Express.js**
+- **MongoDB** with Mongoose ODM
+- **CORS Management**: Seamless support for multiple development environments (Port 3000/3001)
+- **Security**: JWT, Bcrypt, Helmet, and Rate Limiting
 
 ---
 
 ## 🚦 Getting Started
 
 ### Prerequisites
-- **Node.js**: v16 or higher
-- **MongoDB**: Local instance or Atlas URI
-- **Python 3.x**: Required for Python source code analysis
+- **Node.js**: v16+
+- **MongoDB**: Local or Atlas instance
+- **Python 3.x**: For deep Python analysis
 
-### Backend Setup
-1. Navigate to the backend directory:
+### Setup
+1. **Backend**:
    ```bash
-   cd backend
+   cd backend && npm install && npm run dev
    ```
-2. Install dependencies:
+2. **Frontend**:
    ```bash
-   npm install
-   ```
-3. Configure environment variables:
-   - Copy `.env.example` to `.env`
-   - Set your `PORT`, `MONGODB_URI`, and `JWT_SECRET`.
-4. Start the server:
-   ```bash
-   npm run dev
-   ```
-
-### Frontend Setup
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
+   cd frontend && npm install && npm run dev
    ```
 
 ---
 
-## 📖 Usage
+## 📖 Modern Workflow
 
-1. **Login/Register**: Create an account or log in to access the dashboard.
-2. **Upload Code**: Navigate to the **Upload** page and drop your source files (Python, Java, etc.).
-3. **Analyze**: Click "Analyze" to trigger the static analysis engine.
-4. **View Report**: Once complete, view the detailed breakdown of detected smells and code metrics.
-5. **Manage History**: Access the **Reports** page to see past analyses and track improvements.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. **Secure Access**: Register with a **@gmail.com** account.
+2. **Analysis**: Upload code files to trigger the AST analysis engine.
+3. **Health Metrics**: View your **Quality Score** (0-100%) and **Status** (Clean, Minor Issues, or Needs Refactoring).
+4. **Refactor**: Use the provided line-by-line suggestions to improve your score.
+5. **Track Progress**: Monitor historical reports to visualize your code quality evolution.
 
 ---
 
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-Developed with ❤️ by the ACSD Team.
+Developed with 💻 & ❤️ by the ACSD Team.
